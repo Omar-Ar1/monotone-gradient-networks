@@ -1,10 +1,10 @@
-# Monotone Gradient Networks (MGN)
+# 📈 Monotone Gradient Networks (MGN)
 
 This repository implements **Monotone Gradient Networks (MGN)** for solving optimal transport and generative modeling problems, based on the paper:
 
 > **Chaudhari, S., Pranav, S., & Moura, J. M. (2023). Learning Gradients of Convex Functions with Monotone Gradient Networks. arXiv preprint arXiv:2301.10862.**
 
-## Problem Description & Math
+## 🧮 Problem Description & Math
 
 The core problem addressed is **learning the gradient of a convex function** $\psi: \mathbb{R}^d \to \mathbb{R}$, denoted as $g(x) = \nabla \psi(x)$. Since $\psi$ is convex, its gradient $g(x)$ is a **monotone map**, meaning:
 $$ \langle g(x) - g(y), x - y \rangle \ge 0, \quad \forall x, y \in \mathbb{R}^d $$
@@ -13,7 +13,7 @@ This mathematical property is fundamental in:
 1.  **Optimal Transport (OT)**: By Brenier's Theorem, the optimal transport map between two continuous probability measures (with quadratic cost) is the gradient of a strictly convex function.
 2.  **Generative Modeling**: We can model a generative mapping pushing a latent distribution $\mu$ (e.g., Gaussian) to a target data distribution $\nu$ as $g \# \mu = \nu$.
 
-### Leveraging MGN
+### 🧠 Leveraging MGN
 Standard neural networks do not guarantee that the learned map is the gradient of a convex function. **MGN** architectures are specifically designed to parameterize such maps $g(x) = \nabla \psi(x)$ by construction.
 
 We implement two variants of MGN in `src/monotone_grad_nets/models/`:
@@ -22,16 +22,16 @@ We implement two variants of MGN in `src/monotone_grad_nets/models/`:
 
 We also include Input Convex Neural Networks (ICNN) (`I_CNN` and `I_CGN`) for comparison.
 
-## Losses
+## 📉 Losses
 
 We train these networks using various loss functions depending on the task (Gradient Fitting vs. Optimal Transport). These are implemented in `src/monotone_grad_nets/trainers/trainer.py`.
 
-### 1. Gradient Fitting
+### 1. 🎯 Gradient Fitting
 When the true gradient $\nabla f(x)$ is known, we use regression:
 -   **L1 Loss**: $ \mathbb{E} [| g(x) - \nabla f(x) |] $
 -   **MSE Loss**: $ \mathbb{E} [\| g(x) - \nabla f(x) \|^2] $
 
-### 2. Optimal Transport & Generative Modeling
+### 2. 🚚 Optimal Transport & Generative Modeling
 When we only have samples from the source $\mu$ and target $\nu$ distributions, we minimize:
 
 -   **Sinkhorn Divergence**: A regularized approximation of the Wasserstein distance, computed using the `geomloss` library.
@@ -43,7 +43,7 @@ When we only have samples from the source $\mu$ and target $\nu$ distributions, 
     $$ \mathcal{L} = - \mathbb{E}_{x \sim \mu} \left[ \log \nu(g(x)) + \log \det (\nabla g(x)) \right] $$
     Here, $\nabla g(x) = \nabla^2 \psi(x)$ is the Hessian of the potential. We compute $\log \det(\nabla g(x))$ efficiently using `torch.linalg.slogdet`.
 
-## Notebooks & Results
+## 📓 Notebooks & Results
 
 The `notebooks/` directory contains experiments demonstrating the capabilities of MGN:
 
@@ -52,7 +52,7 @@ The `notebooks/` directory contains experiments demonstrating the capabilities o
 -   **`03_color_adaptation_cmgn.ipynb` & `03_color_adaptation_mmgn.ipynb`**: **Color Transfer** application. MGN learns to map the color palette of a source image to match a target image while preserving content structure.
 -   **`04_mnist_generation.ipynb`**: **Generative Modeling**. Training an MGN to map Gaussian noise to the MNIST digits manifold.
 
-## Citation
+## 📚 Citation
 
 ```bibtex
 @article{chaudhari2023learning,
